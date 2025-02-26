@@ -198,7 +198,7 @@ if __name__ == "__main__":
     gc_gamma, gc_gamma_std = fit_surface_tension(gc_laplace_experiment_file_list,gc_laplace_Rp,gc_laplace_Rc)
 
     # Define GC data and magic numbers
-    gc_experiment_list = import_data("compiled_gc.csv")
+    gc_experiment_list = import_data("compiled_data/compiled_gc.csv")
     gc_groups = np.array([0,1,1,1,2,2,2,3,4,4,4,5,6,7])
     gc_rp = np.array([1.00E-06,1.00E-06,1.00E-06,1.00E-06,6.50E-07,7.50E-07,7.00E-07,8.00E-07])
     gc_rc = np.array([0.0000053,3.50E-06,5.10E-06,0.00000475,5.00E-06,0.0000036,0.0000042,0.0000052])
@@ -213,7 +213,7 @@ if __name__ == "__main__":
     young_gc_viscosity, young_gc_viscosity_std = calculate_fluid_properties(gc_popt_list,gc_pstd_list,gc_rp,gc_rc,gc_pressure,gc_gamma,gc_gamma_std,mask=gc_mask)
 
     # Define DFC data and magic numbers
-    dfc_experiment_list = import_data("compiled_dfc.csv")
+    dfc_experiment_list = import_data("compiled_data/compiled_dfc.csv")
     dfc_groups = np.array([0,1,1,2,2,3,3,4,5,6,7,8,9])
     dfc_rp = np.array([9.00E-07,4.50E-07,4.50E-07,5.00E-07,8.50E-07,8.50E-07,7.00E-07,6.00E-07,5.00E-07,8.00E-07])
     dfc_pressure = 20
@@ -232,7 +232,7 @@ if __name__ == "__main__":
     rnase_gamma, rnase_gamma_std = fit_surface_tension(rnase_files,rnase_Rp,rnase_Rc)
 
     # Define RNase treated DFC data and magic numbers
-    rnase_experiment_list = import_data("compiled_rnase.csv")
+    rnase_experiment_list = import_data("compiled_data/compiled_rnase.csv")
     rnase_groups = np.array([0,1,2,2,3,4,4,4,4])
     rnase_rp = np.array([7.50E-07,7.50E-07,7.50E-07,6.00E-07,6.00E-07])
     rnase_rc = np.array([1.80E-06,1.90E-06,1.75E-06,2.30E-06,1.50E-06])
