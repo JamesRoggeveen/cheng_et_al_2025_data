@@ -61,6 +61,7 @@ def constrained_general_model(t,A,B,D):
 
 # Fit an experiment to a given model:
 def fit_experiment(experiment,model,guess,Rp=1e-6):
+    # This accounts for the 0.2 um uncertainity in measurements of Lp and results in higher uncertainity in final results
     measurement_error = np.ones(experiment.t.shape)*(1/Rp*.2e-6)
     pout,pcov = curve_fit(model,experiment.t,experiment.L,p0=guess,maxfev=8000,sigma=measurement_error,absolute_sigma=True)
     pvar = np.diagonal(pcov)
@@ -159,6 +160,7 @@ def fit_laplace_pressure_experiment(file,full_return=False,Rp=1):
     pressures = []
     popt_list = []
     pvar_list = []
+    # Fit each experiment to a constrained fluid model and store the parameters
     for exp in exp_list:
         popt,pvar = fit_experiment(exp,constrained_fluid_model,[1],Rp=Rp)
         pressures.append(exp.pressure)
@@ -167,8 +169,11 @@ def fit_laplace_pressure_experiment(file,full_return=False,Rp=1):
     popt_list = np.squeeze(np.array(popt_list))
     pvar_list = np.array(pvar_list)
     p_std_list = np.sqrt(np.diagonal(pvar_list))
+
+    # Perform linear regression on the parameters, from which the surface tension can be extracted as the y-intercept
     popt,pcov = curve_fit(linear_response,pressures,popt_list,sigma=p_std_list,absolute_sigma=True)
     pstd = np.sqrt(np.diagonal(pcov))
+    # Compute the y-intercept and its standard deviation
     p_intercept = - popt[1]/popt[0]
     p_std = np.sqrt(p_intercept**2*((pstd[0]/popt[0])**2 + (pstd[1]/popt[1])**2 + 2*pcov[0,1]/(popt[0]*popt[1])))
     return p_intercept,p_std
@@ -176,6 +181,7 @@ def fit_laplace_pressure_experiment(file,full_return=False,Rp=1):
 def fit_surface_tension(file_list,Rp,Rc):
     p_intercept_list = []
     p_std_list = []
+    # Find the y-intercept of the linear regression on the Laplace pressures for each experiment
     for file,Rp_val in zip(file_list,Rp):
         p_intercept,p_std = fit_laplace_pressure_experiment(file,Rp=Rp_val)
         p_intercept_list.append(p_intercept)
@@ -183,9 +189,10 @@ def fit_surface_tension(file_list,Rp,Rc):
     p_intercept = np.array(p_intercept_list)
     p_var = np.array(p_std_list)**2
 
+    # Compute the surface tension and its standard deviation
     pre_factor = 0.5*np.divide(np.ones_like(Rc),np.divide(np.ones_like(Rp),Rp) - np.divide(np.ones_like(Rc),Rc))
     gamma = pre_factor*p_intercept
-    gamma_variance = pre_factor**2 * (p_var+.5)
+    gamma_variance = pre_factor**2 * (p_var)
     gamma_mean = np.mean(gamma)
     gamma_std = np.sqrt(np.sum(gamma_variance))/len(gamma)
     return gamma_mean,gamma_std
