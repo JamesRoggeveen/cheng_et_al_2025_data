@@ -1,0 +1,10 @@
+GC Material Parameters:
+GC Viscosity: 2.21e+02 ± 1.02e+02 Pa·s
+Young GC Viscosity: 3.75e+01 ± 9.81e+00 Pa·s
+GC Surface Tension: 1.68e-06 ± 2.81e-07 N/m
+DFC Material Parameters:
+DFC Elastic Modulus: 3.09e+00 ± 7.81e-01 Pa
+DFC Viscosity: 2.46e+02 ± 5.81e+01 Pa·s
+RNase Material Parameters:
+RNase Viscosity: 9.95e+02 ± 4.11e+02 Pa·s
+RNase Surface Tension: 7.99e-06 ± 2.06e-06 N/m
